@@ -25,7 +25,7 @@
          <a href="home.html" class="logo"><i class="fas fa-house"></i>Makaan4U</a>
 
          <ul>
-            <li><a href="#">post property<i class="fas fa-paper-plane"></i></a></li>
+            <li><a href="postproperty.html">post property<i class="fas fa-paper-plane"></i></a></li>
          </ul>
       </section>
    </nav>
@@ -88,12 +88,12 @@
 
 <section class="form-container">
 
-   <form action="" method="post">
+   <form action="" method="post" id="mainform">
       <h3>create an account!</h3>
-      <input type="tel" name="name" required maxlength="50" placeholder="enter your name" class="box">
-      <input type="email" name="email" required maxlength="50" placeholder="enter your email" class="box">
-      <input type="password" name="pass" required maxlength="20" placeholder="enter your password" class="box">
-      <input type="password" name="c_pass" required maxlength="20" placeholder="confirm your password" class="box">
+      <input type="tel" name="name" required maxlength="50" placeholder="enter your name" class="box" id="usernameinp">
+      <input type="email" name="email" required maxlength="50" placeholder="enter your email" class="box" id="emailinp">
+      <input type="password" name="pass" required maxlength="20" placeholder="enter your password" class="box" >
+      <input type="password" name="c_pass" required maxlength="20" placeholder="confirm your password" class="box"  id="passwordinp">
       <p>already have an account? <a href="login.html">login now</a></p>
       <input type="submit" value="register now" name="submit" class="btn">
    </form>
@@ -155,4 +155,69 @@
 <script src="js/script.js"></script>
 
 </body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getAuth,createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+      
+    
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmaq3kKNqRoW8oHje78zPTh3_UU5kufy8",
+      authDomain: "makaan4u-e682f.firebaseapp.com",
+      projectId: "makaan4u-e682f",
+      storageBucket: "makaan4u-e682f.appspot.com",
+      messagingSenderId: "1080517735056",
+      appId: "1:1080517735056:web:56f1b2bc86aa1545849e15",
+      measurementId: "G-BX41E4QW5J"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getDatabase();
+    const auth = getAuth(app);
+
+    let EmailInp = document.getElementById('emailinp');
+    let PassInp = document.getElementById('passwordinp');
+    let UsernameInp = document.getElementById('usernameinp');
+    let MainformInp = document.getElementById('mainform');
+
+    let registerUser = (evt) => {
+          evt.preventDefault();
+          createUserWithEmailAndPassword(auth, EmailInp.value, PassInp.value)
+            .then((Credentials) => {
+              const userId = Credentials.user.uid;
+              const userData = {
+                username: UsernameInp.value,
+                email: EmailInp.value
+              };
+              // Store user data in the Realtime Database under the 'UserAuthList' node
+              set(ref(db, 'UserAuthList/' + userId), userData)
+                .then(() => {
+                  alert('\u2713 Signed Up Successfully');
+                  // Redirect to the desired destination after successful signup
+                  window.location.href = 'login.html';  //homepage path
+                })
+                .catch((error) => {
+                  alert('Error storing user data: ' + error.message);
+                });
+            })
+            .catch((error) => {
+              alert('Error creating user: ' + error.message);
+            });
+        };
+
+        MainformInp.addEventListener('submit', registerUser);
+
+
+
+
+  </script>
 </html>
