@@ -77,7 +77,7 @@
                   <!-- <li><a href="login.html">login</a></li>
                   <li><a href="register.html">register</a></li> -->
                   <li><a href="#">Profile</a></li>
-                  <li><a href="home.html">Sign out</a></li>
+                  <li><a href="#" id="login" onclick="logout()">log out</a></li>
                </ul>
             </li>
          </ul>
@@ -594,6 +594,33 @@
 
 <!-- custom js file link  -->
 <script src="javascript/script.js"></script>
+
+
+<script>
+
+
+function logout() {
+// Clear session storage
+sessionStorage.removeItem("user-creds");
+sessionStorage.removeItem("user-info");
+
+// Retrieve user info
+
+// Replace the current entry in the history
+history.replaceState({}, document.title, "login.html");
+
+// Load the logout page
+window.location.replace("login.html");
+}
+</script>
+
+
+
+
+
+
+
+
 
 </body>
 </html>
